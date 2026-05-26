@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Formulae — 625 Formeln, Rechner & Einheiten</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">∑ <span>Fσямυʟαє</span></div>
+  <nav class="tabs">
+    <button class="tab active" data-tab="formulas">Formeln</button>
+    <button class="tab" data-tab="calc">Rechner</button>
+    <button class="tab" data-tab="units">Einheiten-Rechner</button>
+  </nav>
+  <div class="stats" id="globalStats"></div>
+</header>
+
+<main>
+  <!-- ============ TAB: FORMELN ============ -->
+  <section class="pane active" id="pane-formulas">
+    <div class="controls">
+      <input id="search" type="search" placeholder="Suche Formel, Variable, Beschreibung … (drücke /)">
+      <div id="catChips" class="chips"></div>
+    </div>
+    <div id="formulaList" class="grid"></div>
+  </section>
+
+  <!-- ============ TAB: RECHNER ============ -->
+  <section class="pane" id="pane-calc">
+    <div class="mode-toggle">
+      <button class="mode active" data-mode="basic">Basic</button>
+      <button class="mode" data-mode="pro">Profi</button>
+    </div>
+
+    <!-- Basic -->
+    <div class="calc-card" id="basicCalc">
+      <div class="display" id="basicDisplay">0</div>
+      <div class="keys basic-keys">
+        <button data-k="C" class="op danger">C</button>
+        <button data-k="±" class="op">±</button>
+        <button data-k="%" class="op">%</button>
+        <button data-k="/" class="op">÷</button>
+        <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button>
+        <button data-k="*" class="op">×</button>
+        <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button>
+        <button data-k="-" class="op">−</button>
+        <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button>
+        <button data-k="+" class="op">+</button>
+        <button data-k="0" class="wide">0</button><button data-k=".">.</button>
+        <button data-k="=" class="op primary">=</button>
+      </div>
+      <div class="history-wrap"><h4>History</h4><ul id="basicHistory"></ul></div>
+    </div>
+
+    <!-- Pro -->
+    <div class="calc-card hidden" id="proCalc">
+      <div class="pro-grid">
+        <div class="pro-col">
+          <div class="display" id="proDisplay">0</div>
+          <div class="pro-meta">
+            <span>Modus: <button id="angleMode" class="chip">DEG</button></span>
+            <span>ANS: <code id="ansLabel">0</code></span>
+          </div>
+          <div class="keys pro-keys">
+            <button data-k="sin(">sin</button><button data-k="cos(">cos</button><button data-k="tan(">tan</button>
+            <button data-k="asin(">asin</button><button data-k="acos(">acos</button><button data-k="atan(">atan</button>
+            <button data-k="sinh(">sinh</button><button data-k="cosh(">cosh</button><button data-k="tanh(">tanh</button>
+            <button data-k="log(">ln</button><button data-k="log10(">log</button><button data-k="exp(">eˣ</button>
+            <button data-k="sqrt(">√</button><button data-k="^2">x²</button><button data-k="^">xʸ</button>
+            <button data-k="pi">π</button><button data-k="e">e</button><button data-k="!">n!</button>
+            <button data-k="(">(</button><button data-k=")">)</button><button data-k="ans">ANS</button>
+            <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button>
+            <button data-k="/" class="op">÷</button><button data-k="*" class="op">×</button>
+            <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button>
+            <button data-k="-" class="op">−</button><button data-k="+" class="op">+</button>
+            <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button>
+            <button data-k="0">0</button><button data-k=".">.</button>
+            <button data-k="C" class="op danger">C</button>
+            <button data-k="DEL" class="op">⌫</button>
+            <button data-k="=" class="op primary wide">=</button>
+          </div>
+          <div class="vars-panel">
+            <h4>Variablen</h4>
+            <div id="varList"></div>
+            <div class="var-add">
+              <input id="varName" placeholder="Name (z.B. a)">
+              <input id="varVal" placeholder="Wert">
+              <button id="varAdd">+ setzen</button>
+            </div>
+          </div>
+          <div class="history-wrap"><h4>History</h4><ul id="proHistory"></ul></div>
+        </div>
+
+        <div class="pro-col">
+          <div class="plot-card">
+            <h4>Plot: y = f(x)</h4>
+            <div class="plot-controls">
+              <input id="plotExpr" placeholder="z.B. sin(x)*x" value="sin(x)*x">
+              <input id="plotMin" type="number" value="-10" step="0.5" style="width:80px">
+              <input id="plotMax" type="number" value="10" step="0.5" style="width:80px">
+              <button id="plotBtn">Plot</button>
+            </div>
+            <div id="plotArea"></div>
+          </div>
+
+          <div class="matrix-card">
+            <h4>Matrix-Rechner (bis 4×4)</h4>
+            <div class="mat-controls">
+              Größe:
+              <select id="matSize"><option>2</option><option selected>3</option><option>4</option></select>
+              <button data-mop="A+B">A+B</button>
+              <button data-mop="A-B">A−B</button>
+              <button data-mop="A*B">A·B</button>
+              <button data-mop="detA">det(A)</button>
+              <button data-mop="invA">A⁻¹</button>
+              <button data-mop="trA">Aᵀ</button>
+            </div>
+            <div class="mats">
+              <div><h5>Matrix A</h5><div id="matA"></div></div>
+              <div><h5>Matrix B</h5><div id="matB"></div></div>
+            </div>
+            <div class="mat-result"><h5>Ergebnis</h5><pre id="matResult">—</pre></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TAB: EINHEITEN ============ -->
+  <section class="pane" id="pane-units">
+    <div class="unit-controls">
+      <label>Kategorie:
+        <select id="unitCat"></select>
+      </label>
+    </div>
+    <div class="unit-row">
+      <div>
+        <input id="unitFromVal" type="number" value="1">
+        <select id="unitFrom"></select>
+      </div>
+      <button id="unitSwap" title="Tausche">⇄</button>
+      <div>
+        <input id="unitToVal" type="number" value="">
+        <select id="unitTo"></select>
+      </div>
+    </div>
+    <div class="unit-tip" id="unitTip">Hinweis: Währungskurse sind feste Werte (Stand 2026-05) und nicht live.</div>
+  </section>
+</main>
+
+<footer class="footer">
+  <small>Fσямυʟαє · <span id="formulaCount"></span> Formeln · Made by Kevin Meyer · © 2026</small>
+</footer>
+
+<script src="formulas.js"></script>
+<script src="mathEval.js"></script>
+<script src="app.js"></script>
+<script src="calculator.js"></script>
+<script src="units.js"></script>
+<script>
+  document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.pane').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('pane-'+t.dataset.tab).classList.add('active');
+  });
+</script>
+</body>
+</html>
